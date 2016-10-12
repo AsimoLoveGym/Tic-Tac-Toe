@@ -2,17 +2,35 @@ var activeTurn = "cross";
 var buttonClick1 = new Audio("http://soundbible.com/mp3/Blop-Mark_DiAngelo-79054334.mp3");
 var youWin = new Audio("http://soundbible.com/mp3/SMALL_CROWD_APPLAUSE-Yannick_Lemieux-1268806408.mp3");
 var youLose = new Audio("http://soundbible.com/mp3/Kick-SoundBible.com-1331196005.mp3");
-
+var valiableSpace= [1,1,1,1,1,1,1,1,1];
+var crosses= [0,0,0,0,0,0,0,0,0];
+var noughts= [0,0,0,0,0,0,0,0,0];
 
 $(document).ready(function(){
   $(".btn").click(function(event){
     // console.log(event.currentTarget);
+    // console.log(event.currentTarget.value);
+    var clickedButton = -1;
+    var testString = "";
+    clickedButton = event.currentTarget.value;
+    console.log(clickedButton);
     if (activeTurn === "cross") {
+      buttonClick1.play();
       event.currentTarget.innerHTML = "X";
-      buttonClick1.play();
+      valiableSpace[clickedButton] = 0;
+      crosses[clickedButton] = 1;
+      testString = crosses.join("");
+      console.log("crosses string:",testString);
+      gameOver(testString);
+
     } else {
-      event.currentTarget.innerHTML = "O";
       buttonClick1.play();
+      event.currentTarget.innerHTML = "O";
+      valiableSpace[clickedButton] = 0;
+      noughts[clickedButton] = 1;
+      testString = noughts.join("");
+      console.log("noughts string:",testString);
+      gameOver(testString);
     }
 
     if (activeTurn === "cross") {
@@ -20,6 +38,8 @@ $(document).ready(function(){
     } else {
       activeTurn = "cross";
     }
+
+
     // console.log(event.currentTarget.innerHTML);
     // event.currentTarget.innerHTML()="Hi";
   });
