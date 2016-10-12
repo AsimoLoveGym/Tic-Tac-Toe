@@ -27,9 +27,9 @@
 
         <div class="center-block text-center" id="game-body">
           <h1 id="game-title">Tic Tac Toe</h1>
-          <!-- <div class="row"> -->
+          <div id="game-zone">
             <div class="col-xs-4">
-              <button class="btn btn-primary normal-button" value="0"> </button>
+              <button class="btn btn-primary normal-button" value="0" id="button1"> </button>
             </div>
             <div class="col-xs-4">
               <button class="btn btn-primary normal-button" value="1">  </button>
@@ -57,9 +57,19 @@
             <div class="col-xs-4">
               <button class="btn btn-primary normal-button" value="8">  </button>
             </div>
-          <!-- </div> -->
+
+            <div class="center-block text-center" id="game-over">
+              <p id="game-over-title">GAME OVER!</p>
+              <div class="center-block">
+                <button class="btn btn-info" id="restart">Restart</button>
+              </div>
+            </div>
+          </div>
+
 
         </div><!-- end of "game-body" div -->
+
+
 
       </div> <!-- End of "row" div -->
 

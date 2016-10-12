@@ -12,6 +12,7 @@ main {
 }
 
 #game-body {
+
   width: 100mm;
   height: 120mm;
   background-color: #e1e8f0;
@@ -23,6 +24,7 @@ main {
 }
 
 #game-title {
+
   margin-top: 1em;
   margin-bottom: 1em;
   /*font-family: 'Baloo Bhai', cursive;*/
@@ -39,4 +41,28 @@ main {
   width: 25mm;
   margin-bottom: 5mm;
   font-size: 60px;
+}
+
+#game-zone {
+  position: relative;
+}
+
+#game-over {
+  display: none;
+  position: absolute;
+  /*margin: 0 auto;*/
+  top: -10mm;
+  left: -0.5mm;
+  background: rgba(0, 0, 0, 0.7);
+  width: 100mm;
+  height: 100mm;
+
+  border-radius: 5mm;
+
+  padding-top: 40mm;
+}
+
+#game-over-title {
+  color: white;
+  margin-bottom: 2em;
 }

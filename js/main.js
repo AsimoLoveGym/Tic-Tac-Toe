@@ -7,7 +7,7 @@ var crosses= [0,0,0,0,0,0,0,0,0];
 var noughts= [0,0,0,0,0,0,0,0,0];
 
 $(document).ready(function(){
-  $(".btn").click(function(event){
+  $(".normal-button").click(function(event){
     // console.log(event.currentTarget);
     // console.log(event.currentTarget.value);
     var clickedButton = -1;
@@ -43,6 +43,10 @@ $(document).ready(function(){
     // console.log(event.currentTarget.innerHTML);
     // event.currentTarget.innerHTML()="Hi";
   });
+
+  $("#restart").click(function(event){
+    reset();
+  });
 });
 
 
@@ -59,34 +63,47 @@ var gameOver = function(evalString) {
 
   if (pattern1.test(evalString) || pattern2.test(evalString) ||pattern3.test(evalString) ||pattern4.test(evalString) ||pattern5.test(evalString) ||pattern6.test(evalString) ||pattern7.test(evalString) ||pattern8.test(evalString) ) {
     console.log("You Win!!");
+    $("#game-over").toggle();
+    // reset();
   }
-  if (pattern1.test(evalString) ) {
-    console.log("You Win!! Pattern 1");
-  } else if
-  (pattern2.test(evalString) ) {
-    console.log("You Win!! Pattern 2");
-  } else if
-  (pattern3.test(evalString) ) {
-    console.log("You Win!! Pattern 3");
-  } else if
-  (pattern4.test(evalString) ) {
-    console.log("You Win!! Pattern 4");
-  } else if
-  (pattern5.test(evalString) ) {
-    console.log("You Win!! Pattern 5");
-  } else if
-  (pattern6.test(evalString) ) {
-    console.log("You Win!! Pattern 6");
-  } else if
-  (pattern7.test(evalString) ) {
-    console.log("You Win!! Pattern 7");
-  } else if
-  (pattern8.test(evalString) ) {
-    console.log("You Win!! Pattern 8");
-  }
+  // if (pattern1.test(evalString) ) {
+  //   console.log("You Win!! Pattern 1");
+  // } else if
+  // (pattern2.test(evalString) ) {
+  //   console.log("You Win!! Pattern 2");
+  // } else if
+  // (pattern3.test(evalString) ) {
+  //   console.log("You Win!! Pattern 3");
+  // } else if
+  // (pattern4.test(evalString) ) {
+  //   console.log("You Win!! Pattern 4");
+  // } else if
+  // (pattern5.test(evalString) ) {
+  //   console.log("You Win!! Pattern 5");
+  // } else if
+  // (pattern6.test(evalString) ) {
+  //   console.log("You Win!! Pattern 6");
+  // } else if
+  // (pattern7.test(evalString) ) {
+  //   console.log("You Win!! Pattern 7");
+  // } else if
+  // (pattern8.test(evalString) ) {
+  //   console.log("You Win!! Pattern 8");
+  // }
 };
 
-var evalString;
+var reset = function () {
+  activeTurn = "cross";
+  valiableSpace= [1,1,1,1,1,1,1,1,1];
+  crosses= [0,0,0,0,0,0,0,0,0];
+  noughts= [0,0,0,0,0,0,0,0,0];
+  $(".normal-button").each(function(index,item){
+    item.innerHTML = "";
+  });
+  $("#game-over").toggle();
+}
+
+// var evalString;
 //  evalString = "111010100";
 // evalString = "000111000";
 // evalString = "000000111";
@@ -96,4 +113,4 @@ var evalString;
 // evalString = "100010001";
 // evalString = "001010100";
 
-gameOver(evalString);
+// gameOver(evalString);
