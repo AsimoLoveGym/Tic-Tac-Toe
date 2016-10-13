@@ -6,6 +6,15 @@ var valiableSpace= [1,1,1,1,1,1,1,1,1];
 var crosses= [0,0,0,0,0,0,0,0,0];
 var noughts= [0,0,0,0,0,0,0,0,0];
 
+var pattern1 = /^1{3}/;
+var pattern2 = /^\d{3}1{3}\d{3}$/;
+var pattern3 = /^\d{6}1{3}$/;
+var pattern4 = /^1\d{2}1\d{2}1\d{2}$/;
+var pattern5 = /^\d1\d{2}1\d{2}1\d$/;
+var pattern6 = /^\d{2}1\d{2}1\d{2}1$/;
+var pattern7 = /^1\d{3}1\d{3}1$/;
+var pattern8 = /^\d{2}1\d1\d1\d{2}$/;
+
 $(document).ready(function(){
   $(".normal-button").click(function(event){
     // console.log(event.currentTarget);
@@ -13,14 +22,14 @@ $(document).ready(function(){
     var clickedButton = -1;
     var testString = "";
     clickedButton = event.currentTarget.value;
-    console.log(clickedButton);
+    // console.log(clickedButton);
     if (activeTurn === "cross") {
       buttonClick1.play();
       event.currentTarget.innerHTML = "X";
       valiableSpace[clickedButton] = 0;
       crosses[clickedButton] = 1;
       testString = crosses.join("");
-      console.log("crosses string:",testString);
+      // console.log("crosses string:",testString);
       gameOver(testString);
 
     } else {
@@ -29,7 +38,7 @@ $(document).ready(function(){
       valiableSpace[clickedButton] = 0;
       noughts[clickedButton] = 1;
       testString = noughts.join("");
-      console.log("noughts string:",testString);
+      // console.log("noughts string:",testString);
       gameOver(testString);
     }
 
@@ -49,22 +58,27 @@ $(document).ready(function(){
   });
 });
 
-
-
-var gameOver = function(evalString) {
-  var pattern1 = /^1{3}/;
-  var pattern2 = /^\d{3}1{3}\d{3}$/;
-  var pattern3 = /^\d{6}1{3}$/;
-  var pattern4 = /^1\d{2}1\d{2}1\d{2}$/;
-  var pattern5 = /^\d1\d{2}1\d{2}1\d$/;
-  var pattern6 = /^\d{2}1\d{2}1\d{2}1$/;
-  var pattern7 = /^1\d{3}1\d{3}1$/;
-  var pattern8 = /^\d{2}1\d1\d1\d{2}$/;
+var winPattern = function(evalString) {
+  // var pattern1 = /^1{3}/;
+  // var pattern2 = /^\d{3}1{3}\d{3}$/;
+  // var pattern3 = /^\d{6}1{3}$/;
+  // var pattern4 = /^1\d{2}1\d{2}1\d{2}$/;
+  // var pattern5 = /^\d1\d{2}1\d{2}1\d$/;
+  // var pattern6 = /^\d{2}1\d{2}1\d{2}1$/;
+  // var pattern7 = /^1\d{3}1\d{3}1$/;
+  // var pattern8 = /^\d{2}1\d1\d1\d{2}$/;
 
   if (pattern1.test(evalString) || pattern2.test(evalString) ||pattern3.test(evalString) ||pattern4.test(evalString) ||pattern5.test(evalString) ||pattern6.test(evalString) ||pattern7.test(evalString) ||pattern8.test(evalString) ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+var gameOver = function(evalString) {
+  if (winPattern(evalString)) {
     console.log("You Win!!");
     $("#game-over").toggle();
-    // reset();
   }
   // if (pattern1.test(evalString) ) {
   //   console.log("You Win!! Pattern 1");
@@ -114,3 +128,173 @@ var reset = function () {
 // evalString = "001010100";
 
 // gameOver(evalString);
+
+var caseD = function(){
+
+}
+
+var minimax = function(validSpace, playerArray, oppArray) {
+  var validIndex = [];
+  // extract the index of valid space for next move
+  for(var i = 0; i < validSpace.length; i ++) {
+    if(validSpace[i] === 1){
+      validIndex.push(i);
+    }
+  }
+
+  // Case d: 1 in a line with 2 valid space
+  var evalValidString = validSpace.join("");
+  console.log(evalValidString);
+  var pointInSpace0 = 0;
+  var pointInSpace1 = 0;
+  var pointInSpace2 = 0;
+  var pointInSpace3 = 0;
+  var pointInSpace4 = 0;
+  var pointInSpace5 = 0;
+  var pointInSpace6 = 0;
+  var pointInSpace7 = 0;
+  var pointInSpace8 = 0;
+
+  if (winPattern(evalValidString)) {
+    // how to get the winPattern's matching index?
+    // validSpace[validIndex]
+
+    if (pattern1.test(evalValidString) ) {
+      console.log("IN Pattern 1");
+      // index 0 1 and 2 is the index of pattern1
+        // score += 1;
+        pointInSpace0 ++;
+        pointInSpace1 ++;
+        pointInSpace2 ++;
+    }
+    if (pattern2.test(evalValidString) ) {
+      console.log("IN Pattern 2");
+        // score += 1;
+        pointInSpace3 ++;
+        pointInSpace4 ++;
+        pointInSpace5 ++;
+    }
+    if (pattern3.test(evalValidString) ) {
+      console.log("IN Pattern 3");
+        // score += 1;
+        pointInSpace6 ++;
+        pointInSpace7 ++;
+        pointInSpace8 ++;
+    }
+    if (pattern4.test(evalValidString) ) {
+      console.log("IN Pattern 4");
+        // score += 1;
+        pointInSpace0 ++;
+        pointInSpace3 ++;
+        pointInSpace6 ++;
+    }
+    if (pattern5.test(evalValidString) ) {
+      console.log("IN Pattern 5");
+        // score += 1;
+        pointInSpace1 ++;
+        pointInSpace4 ++;
+        pointInSpace7 ++;
+    }
+    if (pattern6.test(evalValidString) ) {
+      console.log("IN Pattern 6");
+        // score += 1;
+        pointInSpace2 ++;
+        pointInSpace5 ++;
+        pointInSpace8 ++;
+    }
+    if (pattern7.test(evalValidString) ) {
+      console.log("IN Pattern 7");
+        // score += 1;
+        pointInSpace0 ++;
+        pointInSpace4 ++;
+        pointInSpace8 ++;
+    }
+    if (pattern8.test(evalValidString) ) {
+      console.log("IN Pattern 8");
+        // score += 1;
+        pointInSpace2 ++;
+        pointInSpace4 ++;
+        pointInSpace6 ++;
+    }
+  }
+//*************************** End of case d ***************************
+
+
+  var scores = [];
+  console.log(validIndex);
+  for(var i = 0; i < validIndex.length; i ++) {
+    // possible move + playerArray = playerArray_test.
+    var score = 0;
+    var playerArray_test = playerArray.slice();
+    playerArray_test[validIndex[i]] = 1;
+    var oppArray_test = oppArray.slice();
+    oppArray_test[validIndex[i]] = 1;
+    // console.log(i,playerArray_test);
+    // console.log(oppArray_test);
+    // console.log(playerArray);
+
+    // Case a: immediately winning
+    if (winPattern(playerArray_test.join(""))) {
+      score += 100;
+    }
+    // Case b: block oppnent immediately winning
+    if (winPattern(oppArray_test.join(""))) {
+      score += 60;
+    }
+
+    // Case c: 2 in a line with a valid space
+    for(var j = 0; j < validIndex.length; j ++) {
+      if(validIndex[j] !== validIndex[i]) {
+        var playerArray_test2 = playerArray_test.slice();
+        playerArray_test2[validIndex[j]] = 1;
+        // console.log(playerArray_test2.join(""));
+        if(winPattern(playerArray_test2.join(""))) {
+          score += 10;
+          // break;
+        }
+      }
+    }
+
+    // Case d: 1 in a line with 2 valid space
+
+    switch (validIndex[i]) {
+      case 0:
+        score += pointInSpace0;
+        break;
+      case 1:
+        score += pointInSpace1;
+        break;
+      case 2:
+        score += pointInSpace2;
+        break;
+      case 3:
+        score += pointInSpace3;
+        break;
+      case 4:
+        score += pointInSpace4;
+        break;
+      case 5:
+        score += pointInSpace5;
+        break;
+      case 6:
+        score += pointInSpace6;
+        break;
+      case 7:
+        score += pointInSpace7;
+        break;
+      case 8:
+        score += pointInSpace8;
+        break;
+    }
+
+    console.log(score);
+    scores.push(score);
+  } // end of for loop
+
+
+
+
+};
+
+
+minimax([1,0,1,0,1,0,1,0,1],[0,1,0,1,0,0,0,0,0],[0,0,0,0,0,1,0,1,0]);
