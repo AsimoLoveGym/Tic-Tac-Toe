@@ -235,66 +235,72 @@ var minimax = function(validSpace, playerArray, oppArray) {
 
     // Case a: immediately winning
     if (winPattern(playerArray_test.join(""))) {
-      score += 100;
+      console.log("IN Case a");
+      score += 1000;
     }
     // Case b: block oppnent immediately winning
     if (winPattern(oppArray_test.join(""))) {
-      score += 60;
+      console.log("IN Case b");
+      score += 100;
     }
 
-    // Case c: 2 in a line with a valid space
-    for(var j = 0; j < validIndex.length; j ++) {
-      if(validIndex[j] !== validIndex[i]) {
-        var playerArray_test2 = playerArray_test.slice();
-        playerArray_test2[validIndex[j]] = 1;
-        // console.log(playerArray_test2.join(""));
-        if(winPattern(playerArray_test2.join(""))) {
-          score += 10;
-          // break;
+    // In game logic, case c and d need to be analysis when case b and case a didn't happened
+    // Case a and case b are far more important.
+    if(score < 1000) {
+      // Case c: 2 in a line with a valid space
+      for(var j = 0; j < validIndex.length; j ++) {
+        if(validIndex[j] !== validIndex[i]) {
+          var playerArray_test2 = playerArray_test.slice();
+          playerArray_test2[validIndex[j]] = 1;
+          // console.log(playerArray_test2.join(""));
+          if(winPattern(playerArray_test2.join(""))) {
+            // console.log(playerArray_test2.join(""));
+            // console.log("IN Case c");
+            score += 10;
+            // break;
+          }
         }
       }
+
+      // Case d: 1 in a line with 2 valid space
+
+      switch (validIndex[i]) {
+        case 0:
+          score += pointInSpace0;
+          break;
+        case 1:
+          score += pointInSpace1;
+          break;
+        case 2:
+          score += pointInSpace2;
+          break;
+        case 3:
+          score += pointInSpace3;
+          break;
+        case 4:
+          score += pointInSpace4;
+          break;
+        case 5:
+          score += pointInSpace5;
+          break;
+        case 6:
+          score += pointInSpace6;
+          break;
+        case 7:
+          score += pointInSpace7;
+          break;
+        case 8:
+          score += pointInSpace8;
+          break;
+      }
     }
-
-    // Case d: 1 in a line with 2 valid space
-
-    switch (validIndex[i]) {
-      case 0:
-        score += pointInSpace0;
-        break;
-      case 1:
-        score += pointInSpace1;
-        break;
-      case 2:
-        score += pointInSpace2;
-        break;
-      case 3:
-        score += pointInSpace3;
-        break;
-      case 4:
-        score += pointInSpace4;
-        break;
-      case 5:
-        score += pointInSpace5;
-        break;
-      case 6:
-        score += pointInSpace6;
-        break;
-      case 7:
-        score += pointInSpace7;
-        break;
-      case 8:
-        score += pointInSpace8;
-        break;
-    }
-
     console.log(score);
     scores.push(score);
   } // end of for loop
-
-
-
-
 };
 
-
-minimax([1,0,1,0,1,0,1,0,1],[0,1,0,1,0,0,0,0,0],[0,0,0,0,0,1,0,1,0]);
+// Test Case 1: works, more on the case d analysis
+// minimax([1,0,1,0,1,0,1,0,1],[0,1,0,1,0,0,0,0,0],[0,0,0,0,0,1,0,1,0]);
+// Test Case 2: works, more on the blocking and winning score. Case c not that precesis, but works
+// Case a and case b works fine.
+// minimax([1,0,0,0,1,1,0,1,1],[0,1,1,0,0,0,0,0,0],[0,0,0,1,0,0,1,0,0]);
