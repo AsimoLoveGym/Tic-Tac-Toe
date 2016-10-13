@@ -6,6 +6,8 @@ var valiableSpace= [1,1,1,1,1,1,1,1,1];
 var crosses= [0,0,0,0,0,0,0,0,0];
 var noughts= [0,0,0,0,0,0,0,0,0];
 
+var gameMode = "vsComputer";
+
 var pattern1 = /^1{3}/;
 var pattern2 = /^\d{3}1{3}\d{3}$/;
 var pattern3 = /^\d{6}1{3}$/;
@@ -30,7 +32,23 @@ $(document).ready(function(){
       crosses[clickedButton] = 1;
       testString = crosses.join("");
       // console.log("crosses string:",testString);
+      console.log("In cross: ");
       gameOver(testString);
+
+      if (gameMode === "vsComputer") {
+        console.log(valiableSpace);
+        var move = minimax(valiableSpace, noughts, crosses);
+        buttonClick1.play();
+        $("button[value='"+ move +"']").html("O");
+        // event.currentTarget.innerHTML = "O";
+        valiableSpace[move] = 0;
+        noughts[move] = 1;
+        testString = noughts.join("");
+        // console.log("noughts string:",testString);
+        console.log("In gameMode: ");
+        console.log(testString);
+        gameOver(testString);
+      }
 
     } else {
       buttonClick1.play();
@@ -42,11 +60,14 @@ $(document).ready(function(){
       gameOver(testString);
     }
 
-    if (activeTurn === "cross") {
-      activeTurn = "nought";
-    } else {
-      activeTurn = "cross";
-    }
+    // for test
+
+
+    // if (activeTurn === "cross") {
+    //   activeTurn = "nought";
+    // } else {
+    //   activeTurn = "cross";
+    // }
 
 
     // console.log(event.currentTarget.innerHTML);
@@ -128,10 +149,6 @@ var reset = function () {
 // evalString = "001010100";
 
 // gameOver(evalString);
-
-var caseD = function(){
-
-}
 
 var minimax = function(validSpace, playerArray, oppArray) {
   var validIndex = [];
@@ -222,6 +239,8 @@ var minimax = function(validSpace, playerArray, oppArray) {
 
   var scores = [];
   console.log(validIndex);
+  var move = 0;
+  var maxScore = 0;
   for(var i = 0; i < validIndex.length; i ++) {
     // possible move + playerArray = playerArray_test.
     var score = 0;
@@ -294,10 +313,21 @@ var minimax = function(validSpace, playerArray, oppArray) {
           break;
       }
     }
+
+    if (score > maxScore) {
+      maxScore = score;
+      move = validIndex[i];
+    }
+    if (maxScore === 0) {
+      move = validIndex[i];
+    }
     console.log(score);
     scores.push(score);
   } // end of for loop
-};
+  console.log(maxScore, move);
+  return move;
+}; // end of minimax function
+
 
 // Test Case 1: works, more on the case d analysis
 // minimax([1,0,1,0,1,0,1,0,1],[0,1,0,1,0,0,0,0,0],[0,0,0,0,0,1,0,1,0]);
