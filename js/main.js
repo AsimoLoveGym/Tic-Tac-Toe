@@ -2,13 +2,15 @@ var activeTurn = "cross";
 var buttonClick1 = new Audio("http://soundbible.com/mp3/Blop-Mark_DiAngelo-79054334.mp3");
 var youWin = new Audio("http://soundbible.com/mp3/SMALL_CROWD_APPLAUSE-Yannick_Lemieux-1268806408.mp3");
 var youLose = new Audio("http://soundbible.com/mp3/Kick-SoundBible.com-1331196005.mp3");
-var valiableSpace= [1,1,1,1,1,1,1,1,1];
-var crosses= [0,0,0,0,0,0,0,0,0];
-var noughts= [0,0,0,0,0,0,0,0,0];
+var valiableSpace = [1,1,1,1,1,1,1,1,1];
+var crosses = [0,0,0,0,0,0,0,0,0];
+var noughts = [0,0,0,0,0,0,0,0,0];
 
 var gameMode = "";
 var gameDifficulty = "";
 var player = "";
+
+var gameResult = "";
 
 var pattern1 = /^1{3}/;
 var pattern2 = /^\d{3}1{3}\d{3}$/;
@@ -43,18 +45,15 @@ $(document).ready(function(){
 
   $(".player-button").click(function(event){
     // console.log(event.currentTarget.innerHTML);
-    if(event.currentTarget.innerHTML=== "X") {
-      player === "cross";
+    console.log(event.currentTarget.innerHTML);
+    if(event.currentTarget.innerHTML === "X") {
+      player = "cross";
     } else {
-      player === "nought";
-    };
-    console.log(player);
+      player = "nought";
+    }
+    // console.log(player);
     $("#player-choose").toggle();
   });
-
-
-
-
 
   $(".normal-button").click(function(event){
     // console.log(event.currentTarget.value);
@@ -70,7 +69,9 @@ $(document).ready(function(){
       // console.log("crosses string:",testString);
       console.log("In cross: ");
       gameOver(testString);
+      noMoreValidSpace(valiableSpace);
 
+      // Computer takes action
       if (gameMode === "one-player") {
         console.log(valiableSpace);
         var move = minimax(valiableSpace, noughts, crosses);
@@ -84,9 +85,11 @@ $(document).ready(function(){
         console.log("In gameMode: ");
         console.log(testString);
         gameOver(testString);
+        noMoreValidSpace(valiableSpace);
       }
 
     } else {
+      // Two players game mode
       buttonClick1.play();
       event.currentTarget.innerHTML = "O";
       valiableSpace[clickedButton] = 0;
@@ -94,6 +97,7 @@ $(document).ready(function(){
       testString = noughts.join("");
       // console.log("noughts string:",testString);
       gameOver(testString);
+      noMoreValidSpace(valiableSpace);
     }
 
     // for test
@@ -106,10 +110,19 @@ $(document).ready(function(){
       }
     }
 
-
-
     // console.log(event.currentTarget.innerHTML);
     // event.currentTarget.innerHTML()="Hi";
+  });
+
+  $("#start-over").click(function(event){
+    reset();
+    $("#game-mode-choose").show();
+    $("#game-over").hide();
+    $("#game-difficulties-choose").hide();
+    $("#player-choose").hide();
+    gameMode = "";
+    gameDifficulty = "";
+    player = "";
   });
 
   $("#restart").click(function(event){
@@ -138,6 +151,23 @@ var gameOver = function(evalString) {
   if (winPattern(evalString)) {
     console.log("You Win!!");
     $("#game-over").toggle();
+    // if X wins
+    if (activeTurn === "cross" && gameMode === "two-players") {
+      $("#game-over-X-win").show();
+    }
+    //
+    // if O wins
+    if (activeTurn === "nought" && gameMode === "two-players") {
+      $("#game-over-O-win").show();
+    }
+
+    if (activeTurn === "nought" && gameMode === "one-player") {
+      // $("#game-over-O-win").show();
+    }
+
+    if (activeTurn === "nought" && gameMode === "one-player") {
+      // $("#game-over-O-win").show();
+    }
   }
   // if (pattern1.test(evalString) ) {
   //   console.log("You Win!! Pattern 1");
@@ -165,6 +195,13 @@ var gameOver = function(evalString) {
   // }
 };
 
+var noMoreValidSpace = function(validSpaceArr) {
+  if (validSpaceArr.indexOf(1) === -1) {
+    reset();
+    gameResult = "It's a draw!"
+  }
+}
+
 var reset = function () {
   activeTurn = "cross";
   valiableSpace= [1,1,1,1,1,1,1,1,1];
@@ -174,6 +211,11 @@ var reset = function () {
     item.innerHTML = "";
   });
   $("#game-over").toggle();
+  $("#game-over-X-win").hide();
+  $("#game-over-O-win").hide();
+  $("#game-over-draw").hide();
+  $("#game-over-you-win").hide();
+  $("#game-over-you-lose").hide();
 }
 
 // var evalString;

@@ -109,6 +109,28 @@ main {
   padding-top: 40mm;
 }
 
+#game-over-X-win {
+  display: none;
+}
+
+#game-over-O-win {
+  display: none;
+}
+
+#game-over-draw {
+  display: none;
+}
+
+#game-over-you-win {
+  display: none;
+}
+
+#game-over-you-lose {
+  display: none;
+}
+
+
+
 #start-over-div {
   /*display: none;*/
   position: absolute;
@@ -124,7 +146,7 @@ main {
 
 
 
-#game-over-title {
+#game-over-title, #game-over-X-win, #game-over-O-win {
   color: white;
   margin-bottom: 2em;
 }
