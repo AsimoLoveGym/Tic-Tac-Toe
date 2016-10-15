@@ -6,7 +6,9 @@ var valiableSpace= [1,1,1,1,1,1,1,1,1];
 var crosses= [0,0,0,0,0,0,0,0,0];
 var noughts= [0,0,0,0,0,0,0,0,0];
 
-var gameMode = "vsComputer";
+var gameMode = "";
+var gameDifficulty = "";
+var player = "";
 
 var pattern1 = /^1{3}/;
 var pattern2 = /^\d{3}1{3}\d{3}$/;
@@ -18,13 +20,47 @@ var pattern7 = /^1\d{3}1\d{3}1$/;
 var pattern8 = /^\d{2}1\d1\d1\d{2}$/;
 
 $(document).ready(function(){
+  $("#one-player").click(function(){
+    gameMode = "one-player";
+    // Hide game mode choose screen and show difficulty choose
+    $("#game-mode-choose").toggle();
+    $("#game-difficulties-choose").toggle();
+  });
+
+  $("#two-players").click(function(){
+    gameMode = "two-players";
+    // Hide mode choose page and start game
+    $("#game-mode-choose").toggle();
+  });
+
+  $(".difficulty-button").click(function(event){
+    // console.log(event.currentTarget.innerHTML);
+    gameDifficulty = event.currentTarget.innerHTML;
+    console.log(gameDifficulty);
+    $("#game-difficulties-choose").toggle();
+    $("#player-choose").toggle();
+  });
+
+  $(".player-button").click(function(event){
+    // console.log(event.currentTarget.innerHTML);
+    if(event.currentTarget.innerHTML=== "X") {
+      player === "cross";
+    } else {
+      player === "nought";
+    };
+    console.log(player);
+    $("#player-choose").toggle();
+  });
+
+
+
+
+
   $(".normal-button").click(function(event){
-    // console.log(event.currentTarget);
     // console.log(event.currentTarget.value);
     var clickedButton = -1;
     var testString = "";
     clickedButton = event.currentTarget.value;
-    // console.log(clickedButton);
     if (activeTurn === "cross") {
       buttonClick1.play();
       event.currentTarget.innerHTML = "X";
@@ -35,7 +71,7 @@ $(document).ready(function(){
       console.log("In cross: ");
       gameOver(testString);
 
-      if (gameMode === "vsComputer") {
+      if (gameMode === "one-player") {
         console.log(valiableSpace);
         var move = minimax(valiableSpace, noughts, crosses);
         buttonClick1.play();
@@ -62,12 +98,14 @@ $(document).ready(function(){
 
     // for test
 
+    if (gameMode === "two-players") {
+      if (activeTurn === "cross") {
+        activeTurn = "nought";
+      } else {
+        activeTurn = "cross";
+      }
+    }
 
-    // if (activeTurn === "cross") {
-    //   activeTurn = "nought";
-    // } else {
-    //   activeTurn = "cross";
-    // }
 
 
     // console.log(event.currentTarget.innerHTML);

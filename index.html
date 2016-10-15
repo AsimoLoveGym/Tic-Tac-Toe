@@ -27,6 +27,11 @@
 
         <div class="center-block text-center" id="game-body">
           <h1 id="game-title">Tic Tac Toe</h1>
+
+          <div class="center-block text-center" id="start-over-div">
+              <button class="btn btn-danger" id="start-over">StartOver</button>
+          </div>
+
           <div id="game-zone">
             <div class="col-xs-4">
               <button class="btn btn-primary normal-button" value="0" id="button1"> </button>
@@ -56,6 +61,28 @@
             </div>
             <div class="col-xs-4">
               <button class="btn btn-primary normal-button" value="8">  </button>
+            </div>
+
+            <div class="center-block text-center" id="game-mode-choose">
+              <!-- <div class="center-block"> -->
+                <!-- <div class="col-xs-3 col-xs-offset-3"> -->
+                  <button class="btn btn-info" id="one-player">One Player</button>
+                <!-- </div> -->
+                <button class="btn btn-info" id="two-players">Two Players</button>
+              <!-- </div> -->
+            </div>
+
+            <div class="center-block text-center" id="game-difficulties-choose">
+              <p id="game-difficulties-title">Choose Difficulty</p>
+                <button class="btn btn-info difficulty-button" id="easy">Easy</button>
+                <button class="btn btn-info difficulty-button" id="medium">Medium</button>
+                <button class="btn btn-info difficulty-button" id="hard">Hard</button>
+            </div>
+
+            <div class="center-block text-center" id="player-choose">
+              <p id="game-difficulties-title">You prefer: </p>
+                <button class="btn btn-info player-button" id="cross">X</button>
+                <button class="btn btn-info player-button" id="nought">O</button>
             </div>
 
             <div class="center-block text-center" id="game-over">

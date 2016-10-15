@@ -13,6 +13,8 @@ main {
 
 #game-body {
 
+  position: relative;
+
   width: 100mm;
   height: 120mm;
   background-color: #e1e8f0;
@@ -51,7 +53,7 @@ main {
   display: none;
   position: absolute;
   /*margin: 0 auto;*/
-  top: -10mm;
+  top: -9mm;
   left: -0.5mm;
   background: rgba(0, 0, 0, 0.7);
   width: 100mm;
@@ -61,6 +63,66 @@ main {
 
   padding-top: 40mm;
 }
+
+#game-mode-choose {
+  /*display: none;*/
+  position: absolute;
+  /*margin: 0 auto;*/
+  top: -9mm;
+  left: -0.5mm;
+  background: rgba(0, 0, 0, 0.7);
+  width: 100mm;
+  height: 100mm;
+
+  border-radius: 5mm;
+
+  padding-top: 40mm;
+}
+
+#game-difficulties-choose {
+  display: none;
+  position: absolute;
+  /*margin: 0 auto;*/
+  top: -9mm;
+  left: -0.5mm;
+  background: rgba(0, 0, 0, 0.7);
+  width: 100mm;
+  height: 100mm;
+
+  border-radius: 5mm;
+
+  padding-top: 40mm;
+}
+
+#player-choose {
+  display: none;
+  position: absolute;
+  /*margin: 0 auto;*/
+  top: -9mm;
+  left: -0.5mm;
+  background: rgba(0, 0, 0, 0.7);
+  width: 100mm;
+  height: 100mm;
+
+  border-radius: 5mm;
+
+  padding-top: 40mm;
+}
+
+#start-over-div {
+  /*display: none;*/
+  position: absolute;
+  /*margin: 0 auto;*/
+  top: 0;
+  right: 0;
+}
+
+#start-over {
+  border-radius: 5mm;
+  border: solid 2px #e1e8f0;
+}
+
+
 
 #game-over-title {
   color: white;
