@@ -12,6 +12,9 @@ var player = "";
 
 var gameResult = "";
 
+var playingFlag = false;
+var timeOut = 0;
+
 var pattern1 = /^1{3}/;
 var pattern2 = /^\d{3}1{3}\d{3}$/;
 var pattern3 = /^\d{6}1{3}$/;
@@ -48,8 +51,14 @@ $(document).ready(function(){
     console.log(event.currentTarget.innerHTML);
     if(event.currentTarget.innerHTML === "X") {
       player = "cross";
+
+      playingFlag = true;
     } else {
       player = "nought";
+
+      // Computer take the first step
+      // timeOut = setTimeout(firstMoveFunc(),1000);
+      firstMoveFunc();
     }
     // console.log(player);
     $("#player-choose").toggle();
@@ -62,7 +71,7 @@ $(document).ready(function(){
     clickedButton = event.currentTarget.value;
 
     // ********** VS Computer game mode ************
-    if (gameMode === "one-player") {
+    if (gameMode === "one-player" && playingFlag) {
       // player take action first
       if (player === "cross") {
         buttonClick1.play();
@@ -70,50 +79,64 @@ $(document).ready(function(){
         valiableSpace[clickedButton] = 0;
         crosses[clickedButton] = 1;
         testString = crosses.join("");
-        console.log("In cross: ");
+        // console.log("In cross: ");
         gameOver(testString);
         noMoreValidSpace(valiableSpace);
 
+        playingFlag = false;
+
         // Computer takes action
-        console.log(valiableSpace);
+        // console.log(valiableSpace);
+
         var move = minimax(valiableSpace, noughts, crosses);
-        buttonClick1.play();
-        $("button[value='"+ move +"']").html("O");
-        valiableSpace[move] = 0;
-        noughts[move] = 1;
-        testString = noughts.join("");
-        gameOver(testString);
-        noMoreValidSpace(valiableSpace);
+
+        timeOut = setTimeout(function(){
+          buttonClick1.play();
+          $("button[value='"+ move +"']").html("O");
+          valiableSpace[move] = 0;
+          noughts[move] = 1;
+          testString = noughts.join("");
+          gameOver(testString);
+          noMoreValidSpace(valiableSpace);
+          playingFlag = true;
+        },1000);
       }
 
       // computer take action first
       if (player === "nought") {
         // take a random move for the first x
-        if (valiableSpace.indexOf(0) === -1) {
-          var firstMove = Math.floor(Math.random()*9);
-          console.log(firstMove);
-          buttonClick1.play();
-          $("button[value='"+ firstMove +"']").html("X");
-          valiableSpace[firstMove] = 0;
-          crosses[firstMove] = 1;
-        }
+        // The 1st step should be placed after the player choice made, not until the button clicked
+        // if (valiableSpace.indexOf(0) === -1) {
+        //   var firstMove = Math.floor(Math.random()*9);
+        //   console.log(firstMove);
+        //   buttonClick1.play();
+        //   $("button[value='"+ firstMove +"']").html("X");
+        //   valiableSpace[firstMove] = 0;
+        //   crosses[firstMove] = 1;
+        // }
         event.currentTarget.innerHTML = "O";
+        buttonClick1.play();
         valiableSpace[clickedButton] = 0;
         noughts[clickedButton] = 1;
         testString = noughts.join("");
         gameOver(testString);
         noMoreValidSpace(valiableSpace);
+        playingFlag = false;
 
         // Computer takes action
         var move = minimax(valiableSpace, crosses, noughts);
-        buttonClick1.play();
-        $("button[value='"+ move +"']").html("X");
-        valiableSpace[move] = 0;
-        crosses[move] = 1;
-        testString = crosses.join("");
-        console.log(testString);
-        gameOver(testString);
-        noMoreValidSpace(valiableSpace);
+
+        timeOut = setTimeout(function(){
+          buttonClick1.play();
+          $("button[value='"+ move +"']").html("X");
+          valiableSpace[move] = 0;
+          crosses[move] = 1;
+          testString = crosses.join("");
+          console.log(testString);
+          gameOver(testString);
+          noMoreValidSpace(valiableSpace);
+          playingFlag = true;
+        },1000);
       }
     }
     // ********** End of VS Computer game mode ************
@@ -150,9 +173,6 @@ $(document).ready(function(){
     }
     // ********** End of Two players game mode ************
 
-
-    // console.log(event.currentTarget.innerHTML);
-    // event.currentTarget.innerHTML()="Hi";
   });
 
   $("#start-over").click(function(event){
@@ -172,15 +192,6 @@ $(document).ready(function(){
 });
 
 var winPattern = function(evalString) {
-  // var pattern1 = /^1{3}/;
-  // var pattern2 = /^\d{3}1{3}\d{3}$/;
-  // var pattern3 = /^\d{6}1{3}$/;
-  // var pattern4 = /^1\d{2}1\d{2}1\d{2}$/;
-  // var pattern5 = /^\d1\d{2}1\d{2}1\d$/;
-  // var pattern6 = /^\d{2}1\d{2}1\d{2}1$/;
-  // var pattern7 = /^1\d{3}1\d{3}1$/;
-  // var pattern8 = /^\d{2}1\d1\d1\d{2}$/;
-
   if (pattern1.test(evalString) || pattern2.test(evalString) ||pattern3.test(evalString) ||pattern4.test(evalString) ||pattern5.test(evalString) ||pattern6.test(evalString) ||pattern7.test(evalString) ||pattern8.test(evalString) ) {
     return true;
   } else {
@@ -196,44 +207,17 @@ var gameOver = function(evalString) {
     if (activeTurn === "cross" && gameMode === "two-players") {
       $("#game-over-X-win").show();
     }
-    //
     // if O wins
     if (activeTurn === "nought" && gameMode === "two-players") {
       $("#game-over-O-win").show();
     }
-
     if (activeTurn === "nought" && gameMode === "one-player") {
       // $("#game-over-O-win").show();
     }
-
     if (activeTurn === "nought" && gameMode === "one-player") {
       // $("#game-over-O-win").show();
     }
   }
-  // if (pattern1.test(evalString) ) {
-  //   console.log("You Win!! Pattern 1");
-  // } else if
-  // (pattern2.test(evalString) ) {
-  //   console.log("You Win!! Pattern 2");
-  // } else if
-  // (pattern3.test(evalString) ) {
-  //   console.log("You Win!! Pattern 3");
-  // } else if
-  // (pattern4.test(evalString) ) {
-  //   console.log("You Win!! Pattern 4");
-  // } else if
-  // (pattern5.test(evalString) ) {
-  //   console.log("You Win!! Pattern 5");
-  // } else if
-  // (pattern6.test(evalString) ) {
-  //   console.log("You Win!! Pattern 6");
-  // } else if
-  // (pattern7.test(evalString) ) {
-  //   console.log("You Win!! Pattern 7");
-  // } else if
-  // (pattern8.test(evalString) ) {
-  //   console.log("You Win!! Pattern 8");
-  // }
 };
 
 var noMoreValidSpace = function(validSpaceArr) {
@@ -248,6 +232,12 @@ var reset = function () {
   valiableSpace= [1,1,1,1,1,1,1,1,1];
   crosses= [0,0,0,0,0,0,0,0,0];
   noughts= [0,0,0,0,0,0,0,0,0];
+
+  if (player === "nought") {
+    // timeOut = setTimeout(firstMoveFunc(),1000);
+    firstMoveFunc();
+  }
+
   $(".normal-button").each(function(index,item){
     item.innerHTML = "";
   });
@@ -270,6 +260,18 @@ var reset = function () {
 // evalString = "001010100";
 
 // gameOver(evalString);
+
+var firstMoveFunc = function(){
+  var firstMove = Math.floor(Math.random()*9);
+  console.log(firstMove);
+  setTimeout(function () {
+    buttonClick1.play();
+    $("button[value='"+ firstMove +"']").html("X");
+    valiableSpace[firstMove] = 0;
+    crosses[firstMove] = 1;
+    playingFlag = true;
+  }, 1000);
+}
 
 var minimax = function(validSpace, playerArray, oppArray) {
   var validIndex = [];
@@ -298,58 +300,50 @@ var minimax = function(validSpace, playerArray, oppArray) {
     // validSpace[validIndex]
 
     if (pattern1.test(evalValidString) ) {
-      console.log("IN Pattern 1");
+      // console.log("IN Pattern 1");
       // index 0 1 and 2 is the index of pattern1
-        // score += 1;
         pointInSpace0 ++;
         pointInSpace1 ++;
         pointInSpace2 ++;
     }
     if (pattern2.test(evalValidString) ) {
-      console.log("IN Pattern 2");
-        // score += 1;
+      // console.log("IN Pattern 2");
         pointInSpace3 ++;
         pointInSpace4 ++;
         pointInSpace5 ++;
     }
     if (pattern3.test(evalValidString) ) {
-      console.log("IN Pattern 3");
-        // score += 1;
+      // console.log("IN Pattern 3");
         pointInSpace6 ++;
         pointInSpace7 ++;
         pointInSpace8 ++;
     }
     if (pattern4.test(evalValidString) ) {
-      console.log("IN Pattern 4");
-        // score += 1;
+      // console.log("IN Pattern 4");
         pointInSpace0 ++;
         pointInSpace3 ++;
         pointInSpace6 ++;
     }
     if (pattern5.test(evalValidString) ) {
-      console.log("IN Pattern 5");
-        // score += 1;
+      // console.log("IN Pattern 5");
         pointInSpace1 ++;
         pointInSpace4 ++;
         pointInSpace7 ++;
     }
     if (pattern6.test(evalValidString) ) {
-      console.log("IN Pattern 6");
-        // score += 1;
+      // console.log("IN Pattern 6");
         pointInSpace2 ++;
         pointInSpace5 ++;
         pointInSpace8 ++;
     }
     if (pattern7.test(evalValidString) ) {
-      console.log("IN Pattern 7");
-        // score += 1;
+      // console.log("IN Pattern 7");
         pointInSpace0 ++;
         pointInSpace4 ++;
         pointInSpace8 ++;
     }
     if (pattern8.test(evalValidString) ) {
-      console.log("IN Pattern 8");
-        // score += 1;
+      // console.log("IN Pattern 8");
         pointInSpace2 ++;
         pointInSpace4 ++;
         pointInSpace6 ++;
@@ -359,7 +353,7 @@ var minimax = function(validSpace, playerArray, oppArray) {
 
 
   var scores = [];
-  console.log(validIndex);
+  // console.log(validIndex);
   var move = 0;
   var maxScore = 0;
   for(var i = 0; i < validIndex.length; i ++) {
@@ -375,12 +369,12 @@ var minimax = function(validSpace, playerArray, oppArray) {
 
     // Case a: immediately winning
     if (winPattern(playerArray_test.join(""))) {
-      console.log("IN Case a");
+      // console.log("IN Case a");
       score += 1000;
     }
     // Case b: block oppnent immediately winning
     if (winPattern(oppArray_test.join(""))) {
-      console.log("IN Case b");
+      // console.log("IN Case b");
       score += 100;
     }
 
@@ -442,10 +436,10 @@ var minimax = function(validSpace, playerArray, oppArray) {
     if (maxScore === 0) {
       move = validIndex[i];
     }
-    console.log(score);
+    // console.log(score);
     scores.push(score);
   } // end of for loop
-  console.log(maxScore, move);
+  // console.log(maxScore, move);
   return move;
 }; // end of minimax function
 
