@@ -60,55 +60,96 @@ $(document).ready(function(){
     var clickedButton = -1;
     var testString = "";
     clickedButton = event.currentTarget.value;
-    if (activeTurn === "cross") {
-      buttonClick1.play();
-      event.currentTarget.innerHTML = "X";
-      valiableSpace[clickedButton] = 0;
-      crosses[clickedButton] = 1;
-      testString = crosses.join("");
-      // console.log("crosses string:",testString);
-      console.log("In cross: ");
-      gameOver(testString);
-      noMoreValidSpace(valiableSpace);
 
-      // Computer takes action
-      if (gameMode === "one-player") {
+    // ********** VS Computer game mode ************
+    if (gameMode === "one-player") {
+      // player take action first
+      if (player === "cross") {
+        buttonClick1.play();
+        event.currentTarget.innerHTML = "X";
+        valiableSpace[clickedButton] = 0;
+        crosses[clickedButton] = 1;
+        testString = crosses.join("");
+        console.log("In cross: ");
+        gameOver(testString);
+        noMoreValidSpace(valiableSpace);
+
+        // Computer takes action
         console.log(valiableSpace);
         var move = minimax(valiableSpace, noughts, crosses);
         buttonClick1.play();
         $("button[value='"+ move +"']").html("O");
-        // event.currentTarget.innerHTML = "O";
         valiableSpace[move] = 0;
         noughts[move] = 1;
         testString = noughts.join("");
-        // console.log("noughts string:",testString);
-        console.log("In gameMode: ");
-        console.log(testString);
         gameOver(testString);
         noMoreValidSpace(valiableSpace);
       }
 
-    } else {
-      // Two players game mode
-      buttonClick1.play();
-      event.currentTarget.innerHTML = "O";
-      valiableSpace[clickedButton] = 0;
-      noughts[clickedButton] = 1;
-      testString = noughts.join("");
-      // console.log("noughts string:",testString);
-      gameOver(testString);
-      noMoreValidSpace(valiableSpace);
+      // computer take action first
+      if (player === "nought") {
+        // take a random move for the first x
+        if (valiableSpace.indexOf(0) === -1) {
+          var firstMove = Math.floor(Math.random()*9);
+          console.log(firstMove);
+          buttonClick1.play();
+          $("button[value='"+ firstMove +"']").html("X");
+          valiableSpace[firstMove] = 0;
+          crosses[firstMove] = 1;
+        }
+        event.currentTarget.innerHTML = "O";
+        valiableSpace[clickedButton] = 0;
+        noughts[clickedButton] = 1;
+        testString = noughts.join("");
+        gameOver(testString);
+        noMoreValidSpace(valiableSpace);
+
+        // Computer takes action
+        var move = minimax(valiableSpace, crosses, noughts);
+        buttonClick1.play();
+        $("button[value='"+ move +"']").html("X");
+        valiableSpace[move] = 0;
+        crosses[move] = 1;
+        testString = crosses.join("");
+        console.log(testString);
+        gameOver(testString);
+        noMoreValidSpace(valiableSpace);
+      }
     }
+    // ********** End of VS Computer game mode ************
 
-    // for test
-
+    // ********** Two players game mode ************
     if (gameMode === "two-players") {
+      if (activeTurn === "cross") {
+        buttonClick1.play();
+        event.currentTarget.innerHTML = "X";
+        valiableSpace[clickedButton] = 0;
+        crosses[clickedButton] = 1;
+        testString = crosses.join("");
+        // console.log("crosses string:",testString);
+        console.log("In cross: ");
+        gameOver(testString);
+        noMoreValidSpace(valiableSpace);
+      } else {
+        buttonClick1.play();
+        event.currentTarget.innerHTML = "O";
+        valiableSpace[clickedButton] = 0;
+        noughts[clickedButton] = 1;
+        testString = noughts.join("");
+        // console.log("noughts string:",testString);
+        gameOver(testString);
+        noMoreValidSpace(valiableSpace);
+      }
+
+      // Switch active Turn after each step
       if (activeTurn === "cross") {
         activeTurn = "nought";
       } else {
         activeTurn = "cross";
       }
     }
+    // ********** End of Two players game mode ************
+
 
     // console.log(event.currentTarget.innerHTML);
     // event.currentTarget.innerHTML()="Hi";
