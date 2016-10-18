@@ -11,6 +11,7 @@ var gameDifficulty = "";
 var player = "";
 
 var gameResult = "";
+var gameNotOver = true;
 
 var playingFlag = false;
 var timeOut = 0;
@@ -88,18 +89,20 @@ $(document).ready(function(){
         // Computer takes action
         // console.log(valiableSpace);
 
-        var move = minimax(valiableSpace, noughts, crosses);
+        if(gameNotOver) {
+          var move = minimax(valiableSpace, noughts, crosses);
 
-        timeOut = setTimeout(function(){
-          buttonClick1.play();
-          $("button[value='"+ move +"']").html("O");
-          valiableSpace[move] = 0;
-          noughts[move] = 1;
-          testString = noughts.join("");
-          gameOver(testString);
-          noMoreValidSpace(valiableSpace);
-          playingFlag = true;
-        },1000);
+          timeOut = setTimeout(function(){
+            buttonClick1.play();
+            $("button[value='"+ move +"']").html("O");
+            valiableSpace[move] = 0;
+            noughts[move] = 1;
+            testString = noughts.join("");
+            gameOver(testString);
+            noMoreValidSpace(valiableSpace);
+            playingFlag = true;
+          },1000);
+        }
       }
 
       // computer take action first
@@ -124,19 +127,21 @@ $(document).ready(function(){
         playingFlag = false;
 
         // Computer takes action
-        var move = minimax(valiableSpace, crosses, noughts);
+        if (gameNotOver) {
+          var move = minimax(valiableSpace, crosses, noughts);
 
-        timeOut = setTimeout(function(){
-          buttonClick1.play();
-          $("button[value='"+ move +"']").html("X");
-          valiableSpace[move] = 0;
-          crosses[move] = 1;
-          testString = crosses.join("");
-          console.log(testString);
-          gameOver(testString);
-          noMoreValidSpace(valiableSpace);
-          playingFlag = true;
-        },1000);
+          timeOut = setTimeout(function(){
+            buttonClick1.play();
+            $("button[value='"+ move +"']").html("X");
+            valiableSpace[move] = 0;
+            crosses[move] = 1;
+            testString = crosses.join("");
+            console.log(testString);
+            gameOver(testString);
+            noMoreValidSpace(valiableSpace);
+            playingFlag = true;
+          },1000);
+        }
       }
     }
     // ********** End of VS Computer game mode ************
@@ -201,29 +206,46 @@ var winPattern = function(evalString) {
 
 var gameOver = function(evalString) {
   if (winPattern(evalString)) {
+    gameNotOver = false;
     console.log("You Win!!");
-    $("#game-over").toggle();
-    // if X wins
-    if (activeTurn === "cross" && gameMode === "two-players") {
-      $("#game-over-X-win").show();
-    }
-    // if O wins
-    if (activeTurn === "nought" && gameMode === "two-players") {
-      $("#game-over-O-win").show();
-    }
-    if (activeTurn === "nought" && gameMode === "one-player") {
-      // $("#game-over-O-win").show();
-    }
-    if (activeTurn === "nought" && gameMode === "one-player") {
-      // $("#game-over-O-win").show();
-    }
+
+    timeOut = setTimeout(function(){
+      // reset();
+      // $("#game-over").show();
+
+      $("#game-over").show();
+      // if X wins
+      if (activeTurn === "cross" && gameMode === "two-players") {
+        $("#game-over-X-win").show();
+      }
+      // if O wins
+      if (activeTurn === "nought" && gameMode === "two-players") {
+        $("#game-over-O-win").show();
+      }
+      if (activeTurn === "nought" && gameMode === "one-player") {
+        // $("#game-over-O-win").show();
+      }
+      if (activeTurn === "nought" && gameMode === "one-player") {
+        // $("#game-over-O-win").show();
+      }
+
+    }, 500);
+
+
+
   }
 };
 
 var noMoreValidSpace = function(validSpaceArr) {
   if (validSpaceArr.indexOf(1) === -1) {
-    reset();
-    gameResult = "It's a draw!"
+    gameNotOver = false;
+    gameResult = "It's a draw!";
+
+
+    timeOut = setTimeout(function(){
+      // reset();
+      $("#game-over").show();
+    }, 500);
   }
 }
 
@@ -241,12 +263,15 @@ var reset = function () {
   $(".normal-button").each(function(index,item){
     item.innerHTML = "";
   });
-  $("#game-over").toggle();
+  // $("#game-over").toggle();
+  $("#game-over").hide();
   $("#game-over-X-win").hide();
   $("#game-over-O-win").hide();
   $("#game-over-draw").hide();
   $("#game-over-you-win").hide();
   $("#game-over-you-lose").hide();
+
+  gameNotOver = true;
 }
 
 // var evalString;
