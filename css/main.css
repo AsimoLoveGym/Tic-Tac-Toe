@@ -146,7 +146,7 @@ main {
 
 
 
-#game-over-title, #game-over-X-win, #game-over-O-win {
+#game-over-title, #game-over-X-win, #game-over-O-win, #game-over-draw, #game-over-you-win, #game-over-you-lose  {
   color: white;
   margin-bottom: 2em;
 }
