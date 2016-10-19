@@ -10,7 +10,10 @@ var gameMode = "";
 var gameDifficulty = "";
 var player = "";
 
+// paired with noMoreValidSpace()
 var gameResultIsDraw = false;
+// paired with noMoreValidSpace()
+// noMoreValidSpace() will reset game only when draw happened.
 var gameNotOver = true;
 
 var testingPlayer = "";
@@ -283,6 +286,7 @@ var reset = function () {
     firstMoveFunc();
   }
 
+  // reset all the button content to be null
   $(".normal-button").each(function(index,item){
     item.innerHTML = "";
   });
@@ -294,8 +298,10 @@ var reset = function () {
   $("#game-over-you-win").hide();
   $("#game-over-you-lose").hide();
 
+  gameResultIsDraw = false;
   gameNotOver = true;
   testingPlayer = "";
+  playingFlag = false;
 }
 
 // var evalString;
