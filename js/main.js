@@ -65,7 +65,6 @@ $(document).ready(function(){
       player = "nought";
 
       // Computer take the first step
-      // timeOut = setTimeout(firstMoveFunc(),1000);
       firstMoveFunc();
     }
     // console.log(player);
@@ -219,14 +218,16 @@ $(document).ready(function(){
   });
 
   $("#start-over").click(function(event){
+    clearTimeout(timeOut);
+    gameMode = "";
+    gameDifficulty = "";
+    player = "";
+
     reset();
     $("#game-mode-choose").show();
     $("#game-over").hide();
     $("#game-difficulties-choose").hide();
     $("#player-choose").hide();
-    gameMode = "";
-    gameDifficulty = "";
-    player = "";
 
   });
 
@@ -305,7 +306,6 @@ var reset = function () {
   noughts= [0,0,0,0,0,0,0,0,0];
 
   if (player === "nought") {
-    // timeOut = setTimeout(firstMoveFunc(),1000);
     firstMoveFunc();
   }
 
