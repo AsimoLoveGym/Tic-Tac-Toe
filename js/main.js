@@ -78,128 +78,143 @@ $(document).ready(function(){
     var testString = "";
     clickedButton = event.currentTarget.value;
 
-    // ********** VS Computer game mode ************
-    if (gameMode === "one-player" && playingFlag) {
-      // player take action first
-      if (player === "cross") {
-        buttonClick1.play();
-        event.currentTarget.innerHTML = "X";
-        valiableSpace[clickedButton] = 0;
-        crosses[clickedButton] = 1;
-        testString = crosses.join("");
-        // console.log("In cross: ");
-        testingPlayer = "player";
-        gameOver(testString);
-        if (gameNotOver) {
-          noMoreValidSpace(valiableSpace);
+    // valid clicked Button should not been occupied!
+    // Otherwise, ignore the clicking
+    // ********** Clickable button control ************
+    if (valiableSpace[clickedButton] === 1) {
+      // ********** VS Computer game mode ************
+      if (gameMode === "one-player" && playingFlag) {
+        // player take action first
+        if (player === "cross") {
+          buttonClick1.play();
+          event.currentTarget.innerHTML = "X";
+          valiableSpace[clickedButton] = 0;
+          crosses[clickedButton] = 1;
+          testString = crosses.join("");
+          // console.log("In cross: ");
+          testingPlayer = "player";
+          gameOver(testString);
+          if (gameNotOver) {
+            noMoreValidSpace(valiableSpace);
+          }
+
+          playingFlag = false;
+
+          // Computer takes action
+          // console.log(valiableSpace);
+
+          if(gameNotOver) {
+            var move = minimax(valiableSpace, noughts, crosses);
+
+            timeOut = setTimeout(function(){
+              buttonClick1.play();
+              $("button[value='"+ move +"']").html("O");
+              valiableSpace[move] = 0;
+              noughts[move] = 1;
+              testString = noughts.join("");
+              testingPlayer = "computer";
+              gameOver(testString);
+              if (gameNotOver) {
+                noMoreValidSpace(valiableSpace);
+              }
+              playingFlag = true;
+            },1000);
+          }
         }
 
-        playingFlag = false;
+        // computer take action first
+        if (player === "nought") {
+          // take a random move for the first x
+          // The 1st step should be placed after the player choice made, not until the button clicked
+          // if (valiableSpace.indexOf(0) === -1) {
+          //   var firstMove = Math.floor(Math.random()*9);
+          //   console.log(firstMove);
+          //   buttonClick1.play();
+          //   $("button[value='"+ firstMove +"']").html("X");
+          //   valiableSpace[firstMove] = 0;
+          //   crosses[firstMove] = 1;
+          // }
+          event.currentTarget.innerHTML = "O";
+          buttonClick1.play();
+          valiableSpace[clickedButton] = 0;
+          noughts[clickedButton] = 1;
+          testString = noughts.join("");
+          testingPlayer = "player";
+          gameOver(testString);
+          if (gameNotOver) {
+            noMoreValidSpace(valiableSpace);
+          }
+          playingFlag = false;
 
-        // Computer takes action
-        // console.log(valiableSpace);
+          // Computer takes action
+          if (gameNotOver) {
+            var move = minimax(valiableSpace, crosses, noughts);
 
-        if(gameNotOver) {
-          var move = minimax(valiableSpace, noughts, crosses);
-
-          timeOut = setTimeout(function(){
-            buttonClick1.play();
-            $("button[value='"+ move +"']").html("O");
-            valiableSpace[move] = 0;
-            noughts[move] = 1;
-            testString = noughts.join("");
-            testingPlayer = "computer";
-            gameOver(testString);
-            if (gameNotOver) {
-              noMoreValidSpace(valiableSpace);
-            }
-            playingFlag = true;
-          },1000);
+            timeOut = setTimeout(function(){
+              buttonClick1.play();
+              $("button[value='"+ move +"']").html("X");
+              valiableSpace[move] = 0;
+              crosses[move] = 1;
+              testString = crosses.join("");
+              console.log(testString);
+              testingPlayer = "computer";
+              gameOver(testString);
+              if (gameNotOver) {
+                noMoreValidSpace(valiableSpace);
+              }
+              playingFlag = true;
+            },1000);
+          }
         }
       }
+      // ********** End of VS Computer game mode ************
 
-      // computer take action first
-      if (player === "nought") {
-        // take a random move for the first x
-        // The 1st step should be placed after the player choice made, not until the button clicked
-        // if (valiableSpace.indexOf(0) === -1) {
-        //   var firstMove = Math.floor(Math.random()*9);
-        //   console.log(firstMove);
-        //   buttonClick1.play();
-        //   $("button[value='"+ firstMove +"']").html("X");
-        //   valiableSpace[firstMove] = 0;
-        //   crosses[firstMove] = 1;
-        // }
-        event.currentTarget.innerHTML = "O";
-        buttonClick1.play();
-        valiableSpace[clickedButton] = 0;
-        noughts[clickedButton] = 1;
-        testString = noughts.join("");
-        testingPlayer = "player";
-        gameOver(testString);
-        if (gameNotOver) {
-          noMoreValidSpace(valiableSpace);
+
+      // ********** Two players game mode ************
+      if (gameMode === "two-players") {
+        if (activeTurn === "cross") {
+          buttonClick1.play();
+          event.currentTarget.innerHTML = "X";
+          valiableSpace[clickedButton] = 0;
+          crosses[clickedButton] = 1;
+          testString = crosses.join("");
+          // console.log("crosses string:",testString);
+          console.log("In cross: ");
+          gameOver(testString);
+          if (gameNotOver) {
+            noMoreValidSpace(valiableSpace);
+          }
+
+
+        } else {
+          buttonClick1.play();
+          event.currentTarget.innerHTML = "O";
+          valiableSpace[clickedButton] = 0;
+          noughts[clickedButton] = 1;
+          testString = noughts.join("");
+          // console.log("noughts string:",testString);
+          gameOver(testString);
+          if (gameNotOver) {
+            noMoreValidSpace(valiableSpace);
+          }
+
+          // activeTurn = "cross";
         }
-        playingFlag = false;
 
-        // Computer takes action
-        if (gameNotOver) {
-          var move = minimax(valiableSpace, crosses, noughts);
-
-          timeOut = setTimeout(function(){
-            buttonClick1.play();
-            $("button[value='"+ move +"']").html("X");
-            valiableSpace[move] = 0;
-            crosses[move] = 1;
-            testString = crosses.join("");
-            console.log(testString);
-            testingPlayer = "computer";
-            gameOver(testString);
-            if (gameNotOver) {
-              noMoreValidSpace(valiableSpace);
-            }
-            playingFlag = true;
-          },1000);
+        // Switch active Turn after each step
+        if (activeTurn === "cross") {
+          activeTurn = "nought";
+        } else {
+          activeTurn = "cross";
         }
+
+
       }
+      // ********** End of Two players game mode ************
     }
-    // ********** End of VS Computer game mode ************
+    // ********** End of clickable button control ************
 
-    // ********** Two players game mode ************
-    if (gameMode === "two-players") {
-      if (activeTurn === "cross") {
-        buttonClick1.play();
-        event.currentTarget.innerHTML = "X";
-        valiableSpace[clickedButton] = 0;
-        crosses[clickedButton] = 1;
-        testString = crosses.join("");
-        // console.log("crosses string:",testString);
-        console.log("In cross: ");
-        gameOver(testString);
-        if (gameNotOver) {
-          noMoreValidSpace(valiableSpace);
-        }
-      } else {
-        buttonClick1.play();
-        event.currentTarget.innerHTML = "O";
-        valiableSpace[clickedButton] = 0;
-        noughts[clickedButton] = 1;
-        testString = noughts.join("");
-        // console.log("noughts string:",testString);
-        gameOver(testString);
-        if (gameNotOver) {
-          noMoreValidSpace(valiableSpace);
-        }
-      }
 
-      // Switch active Turn after each step
-      if (activeTurn === "cross") {
-        activeTurn = "nought";
-      } else {
-        activeTurn = "cross";
-      }
-    }
-    // ********** End of Two players game mode ************
 
   });
 
@@ -232,19 +247,27 @@ var gameOver = function(evalString) {
   if (winPattern(evalString)) {
     gameNotOver = false;
     console.log("You Win!!");
+    // for debugging
+    // console.log(activeTurn);
 
     timeOut = setTimeout(function(){
-      // reset();
-      // $("#game-over").show();
+      // for debugging
+      // console.log(activeTurn);
 
       $("#game-over").show();
+      // Since setTimeout is a good one for better game experience
+      // activeTurn switch would be immediately happened after gameOver()
+      // The activeTurn would always be "nought" when winning happened in "Cross"
+      // Vice versa
+
       // if X wins
-      if (activeTurn === "cross" && gameMode === "two-players") {
+      if (activeTurn === "nought" && gameMode === "two-players") {
         $("#game-over-X-win").show();
         youWin.play();
       }
+
       // if O wins
-      if (activeTurn === "nought" && gameMode === "two-players") {
+      if (activeTurn === "cross" && gameMode === "two-players") {
         $("#game-over-O-win").show();
         youWin.play();
       }
