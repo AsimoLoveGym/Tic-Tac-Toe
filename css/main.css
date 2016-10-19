@@ -30,6 +30,7 @@ main {
   margin-top: 1em;
   margin-bottom: 1em;
   /*font-family: 'Baloo Bhai', cursive;*/
+  font-family: 'Wendy One', sans-serif;
 }
 
 .black-button {
@@ -149,4 +150,27 @@ main {
 #game-over-title, #game-over-X-win, #game-over-O-win, #game-over-draw, #game-over-you-win, #game-over-you-lose  {
   color: white;
   margin-bottom: 2em;
+  font-size: 1.5em;
+  /*font-family: 'Pacifico', cursive;*/
+  font-family: 'Amatic SC', cursive;
 }
+
+#game-mode-choose-title, #game-difficulties-title, #game-player-choose-title {
+  color: white;
+  font-size: 1.5em;
+  /*font-family: 'Indie Flower', cursive;*/
+  font-family: 'Pacifico', cursive;
+  /*font-family: 'Amatic SC', cursive;*/
+}
+
+#cross, #nought {
+  font-size: 1.5em;
+}
+
+/*#game-mode-choose, #game-difficulties-choose, #player-choose {
+  color: white;
+  font-size: 1.5em;
+  /*font-family: 'Indie Flower', cursive;*/
+  font-family: 'Pacifico', cursive;
+  /*font-family: 'Amatic SC', cursive;*/
+}*/
