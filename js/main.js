@@ -23,6 +23,8 @@ var testingPlayer = "";
 var playingFlag = false;
 var timeOut = 0;
 
+// Here is all the RegExp patterns for winning string
+// 8 cases in total
 var pattern1 = /^1{3}/;
 var pattern2 = /^\d{3}1{3}\d{3}$/;
 var pattern3 = /^\d{6}1{3}$/;
@@ -32,12 +34,28 @@ var pattern6 = /^\d{2}1\d{2}1\d{2}1$/;
 var pattern7 = /^1\d{3}1\d{3}1$/;
 var pattern8 = /^\d{2}1\d1\d1\d{2}$/;
 
+// Testing cases for gameOver()
+// for real testing, gameOver() should be placed after declaration.
+// var evalString;
+//  evalString = "111010100";
+// evalString = "000111000";
+// evalString = "000000111";
+// evalString = "100100100";
+// evalString = "010010010";
+// evalString = "001001001";
+// evalString = "100010001";
+// evalString = "001010100";
+
+// gameOver(evalString);
+
+
 $(document).ready(function(){
   $("#one-player").click(function(){
     gameMode = "one-player";
-    // Hide game mode choose screen and show difficulty choose
+    // Hide game mode choose screen and show player choose
     $("#game-mode-choose").toggle();
-    $("#game-difficulties-choose").toggle();
+    // $("#game-difficulties-choose").toggle();
+    $("#player-choose").toggle();
   });
 
   $("#two-players").click(function(){
@@ -46,37 +64,30 @@ $(document).ready(function(){
     $("#game-mode-choose").toggle();
   });
 
-  $(".difficulty-button").click(function(event){
-    // console.log(event.currentTarget.innerHTML);
-    gameDifficulty = event.currentTarget.innerHTML;
-    console.log(gameDifficulty);
-    $("#game-difficulties-choose").toggle();
-    $("#player-choose").toggle();
-  });
+  // $(".difficulty-button").click(function(event){
+  //   // console.log(event.currentTarget.innerHTML);
+  //   gameDifficulty = event.currentTarget.innerHTML;
+  //   console.log(gameDifficulty);
+  //   $("#game-difficulties-choose").toggle();
+  //   $("#player-choose").toggle();
+  // });
 
   $(".player-button").click(function(event){
-    // console.log(event.currentTarget.innerHTML);
-    console.log(event.currentTarget.innerHTML);
     if(event.currentTarget.innerHTML === "X") {
       player = "cross";
-
       playingFlag = true;
     } else {
       player = "nought";
-
       // Computer take the first step
       firstMoveFunc();
     }
-    // console.log(player);
     $("#player-choose").toggle();
   });
 
   $(".normal-button").click(function(event){
-    // console.log(event.currentTarget.value);
     var clickedButton = -1;
     var testString = "";
     clickedButton = event.currentTarget.value;
-
     // valid clicked Button should not been occupied!
     // Otherwise, ignore the clicking
     // ********** Clickable button control ************
@@ -90,21 +101,17 @@ $(document).ready(function(){
           valiableSpace[clickedButton] = 0;
           crosses[clickedButton] = 1;
           testString = crosses.join("");
-          // console.log("In cross: ");
           testingPlayer = "player";
           gameOver(testString);
           if (gameNotOver) {
             noMoreValidSpace(valiableSpace);
           }
-
           playingFlag = false;
 
           // Computer takes action
-          // console.log(valiableSpace);
-
           if(gameNotOver) {
             var move = minimax(valiableSpace, noughts, crosses);
-
+            // use setTimeout for a little time break before computer take action
             timeOut = setTimeout(function(){
               buttonClick1.play();
               $("button[value='"+ move +"']").html("O");
@@ -125,14 +132,9 @@ $(document).ready(function(){
         if (player === "nought") {
           // take a random move for the first x
           // The 1st step should be placed after the player choice made, not until the button clicked
-          // if (valiableSpace.indexOf(0) === -1) {
-          //   var firstMove = Math.floor(Math.random()*9);
-          //   console.log(firstMove);
-          //   buttonClick1.play();
-          //   $("button[value='"+ firstMove +"']").html("X");
-          //   valiableSpace[firstMove] = 0;
-          //   crosses[firstMove] = 1;
-          // }
+          // firstMoveFunc() will take care of the first move.
+          // sicne the frist move doesn't need click to invoke, it placed in other place.
+
           event.currentTarget.innerHTML = "O";
           buttonClick1.play();
           valiableSpace[clickedButton] = 0;
@@ -148,7 +150,6 @@ $(document).ready(function(){
           // Computer takes action
           if (gameNotOver) {
             var move = minimax(valiableSpace, crosses, noughts);
-
             timeOut = setTimeout(function(){
               buttonClick1.play();
               $("button[value='"+ move +"']").html("X");
@@ -183,57 +184,51 @@ $(document).ready(function(){
           if (gameNotOver) {
             noMoreValidSpace(valiableSpace);
           }
-
-
         } else {
           buttonClick1.play();
           event.currentTarget.innerHTML = "O";
           valiableSpace[clickedButton] = 0;
           noughts[clickedButton] = 1;
           testString = noughts.join("");
-          // console.log("noughts string:",testString);
           gameOver(testString);
           if (gameNotOver) {
             noMoreValidSpace(valiableSpace);
           }
-
-          // activeTurn = "cross";
         }
-
         // Switch active Turn after each step
         if (activeTurn === "cross") {
           activeTurn = "nought";
         } else {
           activeTurn = "cross";
         }
-
-
       }
       // ********** End of Two players game mode ************
     }
     // ********** End of clickable button control ************
-
-
-
   });
 
   $("#start-over").click(function(event){
+    // in case of any code in setTimeout() time flow.
+    // it may change the initial game view
     clearTimeout(timeOut);
+    // reset all the necessary properties before reset() call
+    // in reset(), the firstMoveFunc() will be called.
     gameMode = "";
     gameDifficulty = "";
     player = "";
 
     reset();
+    // reset all the display.
     $("#game-mode-choose").show();
     $("#game-over").hide();
-    $("#game-difficulties-choose").hide();
+    // $("#game-difficulties-choose").hide();
     $("#player-choose").hide();
-
   });
 
   $("#restart").click(function(event){
     reset();
   });
+
 });
 
 var winPattern = function(evalString) {
@@ -246,15 +241,13 @@ var winPattern = function(evalString) {
 
 var gameOver = function(evalString) {
   if (winPattern(evalString)) {
+    // gameNotOver flag switched, any further click would not result in any response
     gameNotOver = false;
-    console.log("You Win!!");
     // for debugging
     // console.log(activeTurn);
-
     timeOut = setTimeout(function(){
       // for debugging
       // console.log(activeTurn);
-
       $("#game-over").show();
       // Since setTimeout is a good one for better game experience
       // activeTurn switch would be immediately happened after gameOver()
@@ -266,7 +259,6 @@ var gameOver = function(evalString) {
         $("#game-over-X-win").show();
         youWin.play();
       }
-
       // if O wins
       if (activeTurn === "cross" && gameMode === "two-players") {
         $("#game-over-O-win").show();
@@ -280,19 +272,15 @@ var gameOver = function(evalString) {
         $("#game-over-you-lose").show();
         youLose.play();
       }
-
     }, 500);
-
   }
-};
+};// *************** End of gameOver() *******************8
 
 var noMoreValidSpace = function(validSpaceArr) {
   if (validSpaceArr.indexOf(1) === -1) {
     gameNotOver = false;
     gameResultIsDraw = true;
-
     timeOut = setTimeout(function(){
-      // reset();
       $("#game-over").show();
       $("#game-over-draw").show();
     }, 500);
@@ -304,11 +292,9 @@ var reset = function () {
   valiableSpace= [1,1,1,1,1,1,1,1,1];
   crosses= [0,0,0,0,0,0,0,0,0];
   noughts= [0,0,0,0,0,0,0,0,0];
-
   if (player === "nought") {
     firstMoveFunc();
   }
-
   // reset all the button content to be null
   $(".normal-button").each(function(index,item){
     item.innerHTML = "";
@@ -327,21 +313,9 @@ var reset = function () {
   playingFlag = false;
 }
 
-// var evalString;
-//  evalString = "111010100";
-// evalString = "000111000";
-// evalString = "000000111";
-// evalString = "100100100";
-// evalString = "010010010";
-// evalString = "001001001";
-// evalString = "100010001";
-// evalString = "001010100";
-
-// gameOver(evalString);
-
+// if computer take the first move, it will be a random move
 var firstMoveFunc = function(){
   var firstMove = Math.floor(Math.random()*9);
-  console.log(firstMove);
   setTimeout(function () {
     buttonClick1.play();
     $("button[value='"+ firstMove +"']").html("X");
@@ -351,6 +325,7 @@ var firstMoveFunc = function(){
   }, 1000);
 }
 
+// ***************** minimax(), not real minimax algorithm *******************8
 var minimax = function(validSpace, playerArray, oppArray) {
   var validIndex = [];
   // extract the index of valid space for next move
@@ -362,7 +337,7 @@ var minimax = function(validSpace, playerArray, oppArray) {
 
   // Case d: 1 in a line with 2 valid space
   var evalValidString = validSpace.join("");
-  console.log(evalValidString);
+  // console.log(evalValidString);
   var pointInSpace0 = 0;
   var pointInSpace1 = 0;
   var pointInSpace2 = 0;
@@ -428,7 +403,6 @@ var minimax = function(validSpace, playerArray, oppArray) {
     }
   }
 //*************************** End of case d ***************************
-
 
   var scores = [];
   // console.log(validIndex);
