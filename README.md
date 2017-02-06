@@ -1,8 +1,8 @@
 # Tic-Tac-Toe
 
-This is a JavaScript project for [Free Code Camp challenge](https://www.freecodecamp.com/challenges/build-a-tic-tac-toe-game)
+This is a JavaScript project for [Free Code Camp challenge](https://www.freecodecamp.com/challenges/build-a-tic-tac-toe-game). You can play it with your friend, or play against a simple AI computer. 
 
-You can [view the site here](http://codepen.io/AsimoLoveGym/full/ALJzqv/)
+[Start Game](http://codepen.io/AsimoLoveGym/full/ALJzqv/)
 
 ## Game Rules:
 
